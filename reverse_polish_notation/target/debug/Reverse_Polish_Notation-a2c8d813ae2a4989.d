@@ -1,0 +1,1 @@
+/home/tulkdan/Development/Rust/reverse_polish_notation/target/debug/Reverse_Polish_Notation-a2c8d813ae2a4989: /home/tulkdan/Development/Rust/reverse_polish_notation/src/lib.rs /home/tulkdan/Development/Rust/reverse_polish_notation/src/main.rs
