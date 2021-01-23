@@ -4,15 +4,15 @@ pub fn brain_luck(code: &str, input: Vec<u8>) -> Vec<u8> {
 
     let instructions: Vec<&str> = code.split("").collect();
     let mut instruction_pointer: usize = 0;
-    let mut open_brackets_position: usize = 0;
-    let mut close_brackets_position: usize = 0;
+    let mut open_brackets: Vec<usize> = vec![];
+    let mut close_brackets: Vec<usize> = vec![];
 
     loop {
         if instruction_pointer >= instructions.len() {
             break;
         }
 
-        println!("pointer: {}\tvalue: {}", vector[pointer], instructions[instruction_pointer]);
+        // println!("pointer: {}\tvalue: {}", vector[pointer], instructions[instruction_pointer]);
 
         match instructions[instruction_pointer] {
             ">" => { pointer += 1; },
@@ -32,18 +32,25 @@ pub fn brain_luck(code: &str, input: Vec<u8>) -> Vec<u8> {
                 }
             },
             "[" => {
-                open_brackets_position = instruction_pointer;
-                if vector[pointer] == 0 {
-                    instruction_pointer = close_brackets_position;
+                if vector[pointer] == 0 && close_brackets.len() > 0 {
+                    instruction_pointer = close_brackets.pop().unwrap();
+                } else {
+                    if close_brackets.len() > 0 {
+                        close_brackets.pop();
+                    }
+                    open_brackets.push(instruction_pointer);
                 }
             },
             "]" => {
-                close_brackets_position = instruction_pointer;
                 if vector[pointer] != 0 {
-                    instruction_pointer = open_brackets_position;
+                    close_brackets.push(instruction_pointer);
+                    instruction_pointer = open_brackets.pop().unwrap() - 1;
+                } else {
+                    open_brackets.pop();
+                    close_brackets.pop();
                 }
             },
-            "." => { println!("{}", vector[pointer]); pointer += 1; },
+            "." => { pointer += 1; },
             "," => { vector[pointer] = input[pointer]; },
             _ => {},
         };
@@ -64,7 +71,6 @@ mod test {
         assert_eq!(String::from_utf8(brain_luck(",+[-.,+]", input)).unwrap(), "Codewars");
     }
 
-    /*
     #[test]
     fn second_test() {
         let input = vec![67, 111, 100, 101, 119, 97, 114, 115, 0];
@@ -72,6 +78,7 @@ mod test {
         assert_eq!(String::from_utf8(brain_luck(",[.[-],]", input)).unwrap(), "Codewars");
     }
 
+    /*
     #[test]
     fn third_test() {
         assert_eq!(brain_luck(",>,<[>[->+>+<<]>>[->>+>>]<<<-]>>.", vec![8, 9]), vec![72]);
