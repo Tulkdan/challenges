@@ -1,5 +1,6 @@
 pub fn brain_luck(code: &str, input: Vec<u8>) -> Vec<u8> {
     let mut vector: Vec<u8> = vec![0; input.len()];
+    let mut output: Vec<u8> = vec![];
     let mut pointer: usize = 0;
 
     let instructions: Vec<&str> = code.split("").collect();
@@ -50,14 +51,14 @@ pub fn brain_luck(code: &str, input: Vec<u8>) -> Vec<u8> {
                     close_brackets.pop();
                 }
             },
-            "." => { pointer += 1; },
+            "." => { output.push(vector[pointer]); pointer +=1; },
             "," => { vector[pointer] = input[pointer]; },
             _ => {},
         };
 
         instruction_pointer += 1;
     }
-    vector
+    output
 }
 
 #[cfg(test)]
