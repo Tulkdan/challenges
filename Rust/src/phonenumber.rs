@@ -1,3 +1,8 @@
+/**
+ * You can check this challenge on the following url
+ * @link{https://www.codewars.com/kata/525f50e3b73515a6db000b83}
+ */
+
 pub fn create_phone_number(numbers: &[u8]) -> String {
     let s: String = numbers.into_iter().map(|n| n.to_string()).collect();
     format!(
